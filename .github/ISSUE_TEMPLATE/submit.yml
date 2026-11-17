@@ -1,0 +1,71 @@
+name: 작품 제출
+description: ESP32 센서 시뮬레이터 작품을 pyOCEAN 갤러리에 내요
+title: "[작품] "
+labels: ["작품"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        안녕, 나는 부이야! 아래 칸을 채우고 맨 아래 **Submit new issue**를 누르면 작품이 접수돼.
+        선생님이 확인하면 갤러리에 올라가. 작품은 여러 개 내도 돼.
+  - type: input
+    id: student
+    attributes:
+      label: 학번 이름
+      placeholder: "예: 1106 김건후"
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: 작품 이름
+      placeholder: "예: 낙동강 하구 수위 관제실"
+    validations:
+      required: true
+  - type: input
+    id: oneline
+    attributes:
+      label: 한 줄 소개
+      placeholder: "예: 수위가 70%를 넘으면 붉은 경보와 음성 대피 안내가 나와요"
+    validations:
+      required: true
+  - type: checkboxes
+    id: parts
+    attributes:
+      label: 사용한 센서·부품
+      options:
+        - label: 수위 센서
+        - label: 조도 센서
+        - label: 초음파 센서
+        - label: DS18B20 수온
+        - label: 토양 수분
+        - label: 온습도
+        - label: 서보 모터
+        - label: 부저
+        - label: 네오픽셀
+  - type: input
+    id: extra
+    attributes:
+      label: 목록에 없는 센서·부품
+      description: 여러 개면 쉼표(,)로 나눠 적어요.
+      placeholder: "예: 탁도 센서, LCD"
+  - type: input
+    id: url
+    attributes:
+      label: 작품 주소 (GitHub Pages)
+      description: 교재를 따라 만든 주소. https:// 로 시작해요. 없으면 비워 둬요.
+      placeholder: "https://아이디.github.io/저장소이름/"
+  - type: textarea
+    id: image
+    attributes:
+      label: 작동 화면
+      description: 작동하는 모습을 캡처한 사진이나 짧은 영상을 이 칸에 끌어다 놓아요. (첫 번째 파일이 카드 사진이 돼요)
+    validations:
+      required: true
+  - type: textarea
+    id: desc
+    attributes:
+      label: 작품 설명
+      description: 어떤 해양 문제를 다뤘는지, 센서 값이 화면에서 어떻게 바뀌는지, 기준값과 경보 방식을 적어요.
+    validations:
+      required: true

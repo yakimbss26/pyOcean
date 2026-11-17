@@ -305,7 +305,7 @@ img{max-width:100%}
         <div class="eyebrow">해양생태탐구 동아리 · ESP32 특강 작품</div>
         <h1>센서로 바다를 읽은 우리 작품</h1>
         <p>11월 12일 특강에서 ESP32 센서와 생성형 AI로 만든 관제 시뮬레이터를 모았어요. 친구 작품을 열어 보고, 좋아요와 한 줄 피드백을 남겨 주세요.</p>
-        <div class="cta"><a class="btn primary" href="#submit">작품 내는 방법</a><a class="btn" href="#guide">GitHub에 올리는 법</a></div>
+        <div class="cta"><a class="btn primary" href="#submit">작품 내기</a><a class="btn" href="#guide">GitHub에 올리는 법</a></div>
       </div>
       <div class="mascot">
         <div class="bubble">안녕, 나는 부이야!<br>오늘은 어떤 바다를 만들었어?</div>
@@ -330,8 +330,8 @@ img{max-width:100%}
     <ol class="howto">
       <li><i>01</i><b>둘러보기</b>카드에서 작품 화면과 사용한 센서를 확인해요.</li>
       <li><i>02</i><b>골라 보기</b>센서 버튼이나 검색창으로 원하는 작품과 친구를 찾아요.</li>
-      <li><i>03</i><b>응원하기</b><a data-gallery-link target="_blank" rel="noopener">Claude 갤러리</a>에서 좋아요와 한 줄 피드백을 남겨요.</li>
-      <li><i>04</i><b>올리고 제출하기</b><a href="#guide">교재</a>를 따라 GitHub에 올린 뒤 작품 내기 탭을 따라 제출해요.</li>
+      <li><i>03</i><b>응원하기</b>카드의 응원 버튼을 누르면 GitHub에서 👍와 댓글을 남길 수 있어요.</li>
+      <li><i>04</i><b>올리고 제출하기</b><a href="#guide">교재</a>를 따라 GitHub에 올린 뒤 작품 내기 탭에서 제출해요.</li>
     </ol>
     <div class="filters" id="filters" role="toolbar" aria-label="센서별 필터"></div>
     <div class="grid" id="grid" aria-live="polite"></div>
@@ -442,10 +442,12 @@ img{max-width:100%}
         <h2><span class="num">7</span>갤러리에 제출하기</h2>
         <ol>
           <li>브라우저 주소창의 내 작품 주소를 복사해요.</li>
-          <li><a data-gallery-link target="_blank" rel="noopener">Claude 작품 갤러리</a>를 열고 <b>작품 제출</b> 탭으로 가요.</li>
-          <li><b>작품 링크</b> 칸에 주소를 붙여넣고, 학번 이름, 작동 화면, 설명을 채워 <kbd class="go">갤러리에 게시하기</kbd>를 눌러요.</li>
+          <li>아래 버튼으로 GitHub의 <b>작품 제출</b> 양식을 열어요. (GitHub에 로그인한 상태여야 해요)</li>
+          <li>학번 이름, 작품 이름, 센서를 채우고 <b>작품 주소</b> 칸에 주소를 붙여넣어요.</li>
+          <li><b>작동 화면</b> 칸에 캡처 사진이나 짧은 영상을 끌어다 놓고, 설명을 쓴 뒤 <kbd class="go">Submit new issue</kbd>를 눌러요.</li>
+          <li>선생님이 확인하면 갤러리에 올라가요. 접수·게시 소식은 그 이슈에 댓글로 와요.</li>
         </ol>
-        <a class="btn primary" data-gallery-link target="_blank" rel="noopener">Claude 갤러리에서 제출하기 ↗</a>
+        <a class="btn primary" data-form-link target="_blank" rel="noopener">작품 제출 양식 열기 ↗</a>
       </section>
 
       <section id="g-more">
@@ -502,23 +504,18 @@ img{max-width:100%}
 <main id="view-submit" hidden>
   <div class="wrap submit">
     <div class="eyebrow">pyOCEAN 작품 갤러리</div>
-    <h1>작품 내는 방법</h1>
-    <p style="color:var(--text);margin:12px 0 24px;max-width:56ch">이 페이지의 작품 목록은 선생님이 저장소의 <code>works.json</code>에 모아 올려요. 아래 두 방법 중 하나로 작품을 내 주세요.</p>
+    <h1>작품 내기</h1>
+    <p style="color:var(--text);margin:12px 0 24px;max-width:56ch">GitHub 계정만 있으면 누구나 작품을 낼 수 있어요. 양식을 채워 내면 선생님이 확인한 뒤 이 갤러리에 올려 줘요. 작품은 여러 개 내도 돼요.</p>
     <div class="ways">
       <div class="way">
-        <h3>1. Claude 갤러리에 바로 제출</h3>
-        <p>학번 이름, 작품 이름, 작동 화면 사진, GitHub Pages 주소, 설명을 적어 올려요. 친구들의 좋아요와 피드백도 여기서 받아요.</p>
-        <a class="btn primary" data-gallery-link target="_blank" rel="noopener">Claude 갤러리 열기 ↗</a>
+        <h3>1. 제출 양식 채우기</h3>
+        <p>학번 이름, 작품 이름, 한 줄 소개, 사용한 센서, 작품 주소, 작동 화면 사진, 설명을 적고 <kbd class="go">Submit new issue</kbd>를 눌러요.</p>
+        <a class="btn primary" data-form-link target="_blank" rel="noopener">작품 제출 양식 열기 ↗</a>
       </div>
       <div class="way">
-        <h3>2. 선생님께 보내기</h3>
-        <p>Claude 계정이 없으면 아래 내용을 선생님께 보내 주세요. 선생님이 이 페이지에 올려 줘요.</p>
-        <ul style="margin:0;padding-left:20px;display:grid;gap:4px">
-          <li>학번 이름, 작품 이름, 한 줄 소개</li>
-          <li>사용한 센서·부품</li>
-          <li>작동 화면 캡처나 짧은 영상</li>
-          <li>GitHub Pages 주소 (<a href="#guide">교재</a> 참고)</li>
-        </ul>
+        <h3>2. 게시되면 응원 받기</h3>
+        <p>선생님이 게시하면 1~2분 뒤 갤러리에 카드가 생겨요. 친구들은 카드의 <b>응원하러 가기</b>를 눌러 내 제출 글에 👍와 댓글을 남길 수 있어요.</p>
+        <p class="small">작품 주소가 아직 없다면 먼저 <a href="#guide">교재</a>를 따라 GitHub Pages에 올려요. GitHub 계정이 없다면 선생님께 직접 내도 돼요.</p>
       </div>
     </div>
   </div>
@@ -527,7 +524,7 @@ img{max-width:100%}
 <footer><div class="wrap"><svg class="bui" aria-hidden="true"><use href="#bui"/></svg><span>2026학년도 부산과학고등학교 해양생태탐구 동아리(파이오션) · ESP32 활용 특강 · 지도교사 김영아</span></div></footer>
 
 <script>
-const GALLERY_URL="https://claude.ai/artifact/S9XYoyArUJn7aEPdGmSNCx";
+const FORM_URL="https://github.com/yakimbss26/pyOcean/issues/new?template=submit.yml";
 const PARTS=["수위 센서","조도 센서","초음파 센서","DS18B20 수온","토양 수분","온습도","서보 모터","부저","네오픽셀"];
 const TOPIC={"수위 센서":"esp32/sensor/soil","토양 수분":"esp32/sensor/soil","조도 센서":"esp32/sensor/cds","초음파 센서":"esp32/sensor/ultrasonic"};
 const $=s=>document.querySelector(s);
@@ -538,7 +535,7 @@ const state={works:[],filter:"all",q:"",loaded:false,failed:false};
 function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
-document.querySelectorAll("[data-gallery-link]").forEach(a=>a.href=GALLERY_URL);
+document.querySelectorAll("[data-form-link]").forEach(a=>a.href=FORM_URL);
 
 function route(){
   const h=location.hash.slice(1);const v=["submit","guide"].includes(h)?h:"gallery";
@@ -586,7 +583,7 @@ function mediaHtml(w){
   const t=(w.parts||[]).map(x=>TOPIC[x]).find(Boolean);
   const top=t?`<span class="topic">${esc(t)}</span>`:"";
   const m=safeMedia(w.image);
-  if(m&&/\.(mp4|webm|mov)$/i.test(m))return `<div class="thumb"><video src="${esc(m)}" muted loop playsinline controls preload="metadata"></video>${top}</div>`;
+  if(m&&(w.mediaType==="video"||/\.(mp4|webm|mov)$/i.test(m)))return `<div class="thumb"><video src="${esc(m)}" muted loop playsinline controls preload="metadata"></video>${top}</div>`;
   if(m)return `<div class="thumb"><img src="${esc(m)}" alt="${esc(w.title)} 작동 화면" loading="lazy">${top}</div>`;
   return `<div class="thumb"><div class="ph"><div><b>${esc(w.title)}</b>작동 화면 준비 중</div></div>${top}</div>`;
 }
@@ -603,7 +600,7 @@ function cardHtml(w){
     </div>
     <div class="actions">
       ${url?`<a class="btn primary" href="${esc(url)}" target="_blank" rel="noopener">바로가기 ↗</a>`:""}
-      <a class="btn" href="${GALLERY_URL}" target="_blank" rel="noopener">♡ 응원하러 가기</a>
+      ${safeUrl(w.issue)?`<a class="btn" href="${esc(w.issue)}" target="_blank" rel="noopener">♡ 응원하러 가기</a>`:""}
     </div>
   </article>`;
 }
@@ -616,7 +613,7 @@ function renderGrid(){
     .sort((a,b)=>(b.date||"")>(a.date||"")?1:-1);
   if(!list.length){g.innerHTML=state.works.length
     ?`<div class="empty">${B}<b>조건에 맞는 작품이 없어요</b>다른 센서를 고르거나 검색어를 지워 보세요.</div>`
-    :`<div class="empty">${B}<b>아직 바다가 조용해요</b>수해 경보기, 스마트 가로등, 도난 경보기, 스마트 마린 배리어처럼 직접 만든 시뮬레이터를 기다리고 있어요.<a class="btn primary" href="#submit">작품 내는 방법 보기</a></div>`;return}
+    :`<div class="empty">${B}<b>아직 바다가 조용해요</b>수해 경보기, 스마트 가로등, 도난 경보기, 스마트 마린 배리어처럼 직접 만든 시뮬레이터를 기다리고 있어요.<a class="btn primary" href="${FORM_URL}" target="_blank" rel="noopener">첫 작품 내기 ↗</a></div>`;return}
   g.innerHTML=list.map(cardHtml).join("");
 }
 function renderAll(){renderStats();renderFilters();renderGrid()}

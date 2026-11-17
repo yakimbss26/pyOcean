@@ -1,0 +1,85 @@
+name: 작품 게시
+
+on:
+  issues:
+    types: [opened, labeled, unlabeled, edited]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: works-json
+  cancel-in-progress: false
+
+jobs:
+  welcome:
+    if: github.event.action == 'opened' && contains(github.event.issue.labels.*.name, '작품')
+    runs-on: ubuntu-latest
+    steps:
+      - name: 접수 안내
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUM: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh label create "게시" --repo "$REPO" --color 2A8C9E --description "선생님이 붙이면 갤러리에 올라가요" 2>/dev/null || true
+          gh issue comment "$NUM" --repo "$REPO" --body "작품 접수 완료! 🌊 선생님이 확인하고 **게시** 라벨을 붙이면 갤러리에 올라가요. 고칠 곳이 있으면 이 이슈의 ··· → Edit으로 바로 고쳐도 돼요."
+
+  publish:
+    if: >
+      contains(github.event.issue.labels.*.name, '게시') &&
+      (github.event.action != 'labeled' || github.event.label.name == '게시') &&
+      github.event.action != 'unlabeled'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: works.json에 추가
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_DATE: ${{ github.event.issue.created_at }}
+        run: python3 .github/scripts/add_work.py
+      - name: 저장
+        env:
+          NUM: ${{ github.event.issue.number }}
+        run: |
+          git config user.name "pyocean-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add works.json
+          git diff --cached --quiet && exit 0
+          git commit -m "작품 게시 #$NUM"
+          git pull --rebase origin main
+          git push
+      - name: 알림
+        if: github.event.action == 'labeled'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUM: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: gh issue comment "$NUM" --repo "$REPO" --body "갤러리에 올라갔어요! 1~2분 뒤 https://yakimbss26.github.io/pyOcean/ 에서 확인해 보세요. 친구들은 이 이슈에 👍와 댓글로 응원할 수 있어요."
+
+  unpublish:
+    if: github.event.action == 'unlabeled' && github.event.label.name == '게시'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: works.json에서 빼기
+        env:
+          NUM: ${{ github.event.issue.number }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          n = int(os.environ["NUM"])
+          w = json.load(open("works.json", encoding="utf-8"))
+          w = [x for x in w if x.get("id") != n]
+          f = open("works.json", "w", encoding="utf-8"); json.dump(w, f, ensure_ascii=False, indent=2); f.write("\n")
+          PY
+          git config user.name "pyocean-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add works.json
+          git diff --cached --quiet && exit 0
+          git commit -m "작품 내림 #$NUM"
+          git pull --rebase origin main
+          git push

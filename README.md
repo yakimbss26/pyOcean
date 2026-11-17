@@ -4,16 +4,26 @@
 
 - 갤러리: 작품 목록, 센서별 필터, 학번·이름 검색
 - 교재: 내 시뮬레이터 HTML을 GitHub Pages에 올리는 7단계와 문제 해결
-- 작품 내는 방법: Claude 갤러리 제출 또는 선생님께 보내기
+- 작품 내기: GitHub 계정이 있으면 누구나 이슈 제출 양식으로 작품을 내고, 선생님이 게시 라벨을 붙이면 자동으로 갤러리에 올라감
 
 ## 사이트 켜기
 
 1. 저장소 Settings → Pages
 2. Build and deployment의 Source: Deploy from a branch
 3. Branch: main, 폴더: / (root) → Save
-4. 1~2분 뒤 https://yakimbss26.github.io/pyOcean/ 에서 확인
+4. 1~2분 뒤 https:## 작품 받기 (자동)
 
-## 작품 추가하기
+1. 학생이 갤러리의 "작품 내기" 버튼 또는 Issues → New issue → 작품 제출 양식으로 작품을 냅니다.
+2. 이슈가 열리면 봇이 접수 댓글을 달고, 처음 한 번 `게시` 라벨을 만듭니다.
+3. 선생님이 이슈 내용을 확인하고 오른쪽 Labels에서 `게시`를 붙이면 `works.json`에 자동으로 추가되고 1~2분 뒤 사이트에 나타납니다.
+4. 게시된 작품을 내리려면 `게시` 라벨을 떼면 됩니다. 학생이 이슈를 고치면(Edit) 게시된 내용도 자동으로 바뀝니다.
+5. 친구들은 카드의 "응원하러 가기"로 그 이슈에 👍와 댓글을 남깁니다.
+
+처음 한 번 확인할 것: Settings → Actions → General → Workflow permissions가 **Read and write permissions**로 되어 있어야 봇이 `works.json`을 저장할 수 있습니다.
+
+## 작품 직접 추가하기
+
+학생이 GitHub 계정이 없을 때는 선생님이 직접 넣습니다.
 
 1. 작동 화면 사진(또는 짧은 영상)을 `images/` 폴더에 올립니다. 파일 이름은 영문·숫자로 (예: `1106-flood.png`).
 2. `works.json`을 열고 연필 아이콘으로 수정해 작품 하나를 추가합니다. 형식은 `works.example.json`을 참고하세요.
@@ -31,6 +41,8 @@
 | date | 올린 날짜 (YYYY-MM-DD) | |
 
 작품 여러 개는 `[ {...}, {...} ]`처럼 쉼표로 이어 적습니다. 쉼표나 따옴표가 하나라도 빠지면 목록이 안 보이니, 저장 전에 jsonlint.com 같은 곳에서 검사하면 안전합니다.
+
+저장 전에 jsonlint.com 같은 곳에서 검사하면 안전합니다.
 
 ## 디자인
 
