@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>pyOCEAN 작품 갤러리</title>
+<meta name="description" content="부산과학고 해양생태탐구 동아리 ESP32 특강 학생 작품 갤러리와 GitHub Pages 교재">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Nanum+Gothic+Coding&display=swap">
+<style>
+/* Layout: 수채화 하늘·바다 첫 장면(부이와 말풍선) → 물결 경계 → 모래 종이 위 현황·카드 그리드. pyOCEAN DESIGN.md 기준 */
+:root{
+  --bg:#FBF5E8; --surface:#FFFDF7; --sunk:#F1E8D4; --line:rgba(30,111,128,.16); --line2:rgba(30,111,128,.28);
+  --ink:#2B3A42; --text:#3F4F57; --muted:#6E7F86; --faint:#93A2A8;
+  --accent:#2A8C9E; --accent-deep:#1E6F80; --accent-hover:#237D8E; --accent-ink:#FFFFFF;
+  --coral:#E9765F; --sun:#F6C65B; --leaf:#5E9A63; --cream:#FFF9EC;
+  --sky1:#BFE3F0; --sky2:#E3F2EF; --sea1:#9AD2DC; --sea2:#7FC4D2; --sea3:#4FA6B9;
+  --frost:rgba(255,253,247,.82); --err:#C2412D; --ok:#3F7F45;
+  --shadow:0 2px 0 rgba(30,111,128,.06),0 10px 24px rgba(43,58,66,.08);
+  --cloud:rgba(255,255,255,.85);
+  --display:"Jua","Gowun Dodum","Malgun Gothic",system-ui,sans-serif;
+  --body:"Gowun Dodum","Malgun Gothic",system-ui,-apple-system,sans-serif;
+  --mono:"Nanum Gothic Coding",ui-monospace,Consolas,monospace;
+  --t:.3s ease;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F2433; --surface:#17324A; --sunk:#12293C; --line:rgba(108,199,211,.16); --line2:rgba(108,199,211,.3);
+  --ink:#EAF2F0; --text:#C9D8DB; --muted:#93A9B0; --faint:#6F8A93;
+  --accent:#6CC7D3; --accent-deep:#3E98A5; --accent-hover:#86D3DD; --accent-ink:#0F2433;
+  --coral:#FF9C86; --sun:#F3E3B3; --leaf:#8FC493; --cream:#FFF4DC;
+  --sky1:#0D2236; --sky2:#18405A; --sea1:#1F5A72; --sea2:#174A60; --sea3:#123D52;
+  --frost:rgba(15,36,51,.8); --err:#FF9C86; --ok:#8FC493;
+  --shadow:0 10px 26px rgba(0,0,0,.35); --cloud:rgba(234,242,240,.08); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F2433; --surface:#17324A; --sunk:#12293C; --line:rgba(108,199,211,.16); --line2:rgba(108,199,211,.3);
+  --ink:#EAF2F0; --text:#C9D8DB; --muted:#93A9B0; --faint:#6F8A93;
+  --accent:#6CC7D3; --accent-deep:#3E98A5; --accent-hover:#86D3DD; --accent-ink:#0F2433;
+  --coral:#FF9C86; --sun:#F3E3B3; --leaf:#8FC493; --cream:#FFF4DC;
+  --sky1:#0D2236; --sky2:#18405A; --sea1:#1F5A72; --sea2:#174A60; --sea3:#123D52;
+  --frost:rgba(15,36,51,.8); --err:#FF9C86; --ok:#8FC493;
+  --shadow:0 10px 26px rgba(0,0,0,.35); --cloud:rgba(234,242,240,.08); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
+::placeholder{color:var(--faint)}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+/* 상단바 */
+header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--frost);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.bar .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:8px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.brand .logo{width:38px;height:38px;flex:none}
+.brand b{font-family:var(--display);font-weight:400;font-size:22px;color:var(--ink)}
+.brand span{color:var(--muted);font-size:13px}
+nav.tabs{display:flex;gap:4px;background:var(--sunk);padding:4px;border-radius:999px}
+nav.tabs a{padding:6px 16px;border-radius:999px;color:var(--muted);text-decoration:none;font-size:14.5px;transition:background-color var(--t),color var(--t)}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 2px 6px rgba(43,58,66,.1)}
+
+/* 첫 장면 */
+.hero{position:relative;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 70%,var(--sea1) 100%);overflow:hidden}
+.sky{position:absolute;inset:0;pointer-events:none}
+.cloud{position:absolute;border-radius:999px;background:var(--cloud);filter:blur(1px)}
+.cloud::before,.cloud::after{content:"";position:absolute;background:inherit;border-radius:50%}
+.c1{width:150px;height:40px;left:6%;top:34px}.c1::before{width:70px;height:62px;left:22px;top:-30px}.c1::after{width:56px;height:46px;left:76px;top:-20px}
+.c2{width:110px;height:30px;left:30%;top:70px;opacity:.8}.c2::before{width:52px;height:46px;left:16px;top:-22px}.c2::after{width:40px;height:34px;left:54px;top:-14px}
+.c3{width:180px;height:44px;right:5%;top:22px;opacity:.9}.c3::before{width:84px;height:72px;left:30px;top:-36px}.c3::after{width:64px;height:54px;left:98px;top:-24px}
+.orb{position:absolute;left:54%;top:46px;width:64px;height:64px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 14px color-mix(in srgb,var(--sun) 25%,transparent),0 0 60px color-mix(in srgb,var(--sun) 60%,transparent);opacity:.85}
+.stars{position:absolute;inset:0;opacity:0;background-image:radial-gradient(1.6px 1.6px at 12% 22%,var(--sun) 50%,transparent 52%),radial-gradient(1.4px 1.4px at 28% 48%,var(--sun) 50%,transparent 52%),radial-gradient(1.8px 1.8px at 64% 16%,var(--sun) 50%,transparent 52%),radial-gradient(1.2px 1.2px at 82% 56%,var(--sun) 50%,transparent 52%),radial-gradient(1.5px 1.5px at 44% 30%,var(--sun) 50%,transparent 52%),radial-gradient(1.3px 1.3px at 92% 30%,var(--sun) 50%,transparent 52%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stars{opacity:1}}
+:root[data-theme="dark"] .stars{opacity:1}
+.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:24px;align-items:center;padding-block:64px 24px}
+.hero-text{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.eyebrow{width:fit-content;font-size:14px;color:var(--accent-deep);background:var(--frost);padding:3px 12px;border-radius:999px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(32px,5vw,48px);line-height:1.2;margin:0;color:var(--ink);text-wrap:balance}
+.hero p{margin:0;color:var(--text);max-width:48ch;font-size:16px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.mascot{position:relative;display:flex;flex-direction:column;align-items:center}
+.mascot .bui{width:min(240px,100%);height:auto;aspect-ratio:1}
+.bubble{position:relative;background:var(--surface);color:var(--ink);font-family:var(--display);font-size:18px;line-height:1.35;padding:12px 18px;border-radius:22px;box-shadow:var(--shadow);text-align:center;margin-bottom:6px}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-10px;width:20px;height:20px;background:var(--surface);transform:translateX(-50%) rotate(45deg);border-radius:4px}
+.bob{animation:bob 4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-2deg)}}
+.glow{animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{50%{opacity:.25}}
+.waves{display:block;width:100%;height:90px;position:relative;margin-top:-10px}
+.waves .w1{fill:var(--sea2);opacity:.7}.waves .w2{fill:var(--sea3);opacity:.55}.waves .w3{fill:var(--bg)}
+.waves g{animation:drift 9s ease-in-out infinite}
+.waves g:nth-child(2){animation-duration:12s;animation-direction:reverse}
+@keyframes drift{50%{transform:translateX(-30px)}}
+
+/* 현황 */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0;padding-block:8px 0;font-variant-numeric:tabular-nums}
+.stats div{background:var(--surface);border-radius:20px;padding:14px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.stats dt{font-size:13.5px;color:var(--muted)}
+.stats dd{margin:0;font-family:var(--display);font-size:32px;line-height:1.15;color:var(--ink)}
+.stats dd small{font-family:var(--body);font-size:14px;color:var(--muted)}
+.stats div:nth-child(3) dd{color:var(--coral)}
+
+.howto{margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.howto li{list-style:none;font-size:14px;color:var(--muted);background:var(--sunk);border-radius:18px;padding:14px 16px}
+.howto li b{display:block;color:var(--ink);font-family:var(--display);font-weight:400;font-size:17px;margin-bottom:2px}
+.howto li i{font-style:normal;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--surface);color:var(--accent-deep);font-size:12px;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.howto a{color:var(--accent-deep)}
+
+/* 필터 */
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding-block:28px 18px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 55px);z-index:4;background:var(--bg)}
+.chip{appearance:none;border:1.5px solid var(--line2);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 14px;font:inherit;font-size:14px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:background-color var(--t),color var(--t),border-color var(--t)}
+.chip:hover{border-color:var(--accent)}
+.chip .n{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.8}
+.search{margin-left:auto;min-width:0;flex:0 1 240px}
+.search input{width:100%;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line2);background:var(--surface);color:var(--ink);font:inherit;font-size:14px}
+
+/* 카드 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;padding-bottom:72px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;padding:10px;transition:transform var(--t)}
+.card:hover{transform:translateY(-3px)}
+.thumb{aspect-ratio:16/10;max-width:100%;background:var(--sunk);position:relative;display:block;overflow:hidden;border-radius:16px}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:13px;padding:16px;background:linear-gradient(180deg,var(--sky2),var(--sea1))}
+.thumb .ph b{display:block;font-family:var(--display);font-weight:400;font-size:20px;color:var(--ink);margin-bottom:2px}
+.topic{position:absolute;left:10px;top:10px;font-family:var(--mono);font-size:11.5px;padding:3px 10px;border-radius:999px;background:var(--frost);color:var(--accent-deep)}
+.body{padding:12px 8px 4px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.proj{font-size:13px;color:var(--accent-deep);display:flex;align-items:center;gap:6px}
+.proj::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sun)}
+.card h3{margin:0;font-family:var(--display);font-weight:400;font-size:21px;line-height:1.3;color:var(--ink);text-wrap:balance}
+.one{margin:0;font-size:14.5px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tags span{font-size:12.5px;padding:2px 10px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+details.more summary{cursor:pointer;color:var(--accent-deep);font-size:13.5px}
+details.more p{margin:8px 0 0;font-size:14px;white-space:pre-wrap;background:var(--sunk);border-radius:14px;padding:12px 14px}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 8px 6px}
+.btn{appearance:none;border:1.5px solid var(--line2);border-bottom-width:4px;background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 16px;min-height:38px;font:inherit;font-size:14.5px;cursor:pointer;text-decoration:none;display:inline-flex;gap:6px;align-items:center;justify-content:center;transition:background-color var(--t),transform .12s ease,border-bottom-width .12s ease}
+.btn:hover{background:var(--sunk)}
+.btn:active{transform:translateY(2px);border-bottom-width:2px}
+.btn.primary{background:var(--accent);border-color:var(--accent-deep);color:var(--accent-ink)}
+.btn.primary:hover{background:var(--accent-hover)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.like[aria-pressed="true"]{color:var(--coral);border-color:color-mix(in srgb,var(--coral) 55%,transparent)}
+.like .n{font-variant-numeric:tabular-nums}
+.spacer{margin-left:auto}
+.mini{appearance:none;border:0;background:none;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;padding:4px;text-decoration:underline;text-underline-offset:3px}
+.mini:hover{color:var(--ink)}
+.comments{padding:0 8px 6px;display:flex;flex-direction:column;gap:8px}
+.comments ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;max-height:140px;overflow:auto}
+.comments li{font-size:13.5px;background:var(--sunk);border-radius:14px 14px 14px 4px;padding:6px 12px}
+.comments li b{color:var(--accent-deep);font-weight:400;margin-right:6px}
+.comments form{display:grid;grid-template-columns:82px minmax(0,1fr) auto;gap:6px}
+.comments input{min-width:0;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line2);background:var(--bg);color:var(--ink);font:inherit;font-size:13.5px}
+.comments form .btn{min-height:34px;padding:4px 12px;font-size:13.5px}
+
+.empty{grid-column:1/-1;padding:28px 20px 40px;text-align:center;color:var(--muted);background:var(--surface);border-radius:26px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:6px}
+.empty .bui{width:130px;height:130px}
+.empty b{display:block;font-family:var(--display);font-weight:400;font-size:24px;color:var(--ink)}
+.empty .btn{margin-top:10px}
+
+/* 제출 */
+.submit{max-width:760px;padding-block:44px 72px}
+.submit form{display:grid;gap:20px;background:var(--surface);border-radius:26px;padding:26px;box-shadow:var(--shadow)}
+.field{display:grid;gap:6px;min-width:0}
+.field label,.field legend{font-family:var(--display);font-weight:400;font-size:17px;color:var(--ink)}
+.field .hint{font-size:13px;color:var(--muted)}
+.field .hint a{color:var(--accent-deep)}
+.req{color:var(--coral);margin-left:3px}
+.field input[type=text],.field input[type=url],.field select,.field textarea{width:100%;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line2);background:var(--bg);color:var(--ink);font:inherit;transition:border-color var(--t),box-shadow var(--t)}
+.field input:focus,.field textarea:focus,.addpart input:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent);outline:none}
+.field textarea{min-height:120px;resize:vertical}
+fieldset.field{border:0;padding:0;margin:0}
+.picks{display:flex;flex-wrap:wrap;gap:6px}
+.picks label{font-family:var(--body);font-size:13.5px;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line2);border-radius:999px;padding:4px 12px;cursor:pointer;background:var(--bg);color:var(--ink)}
+.picks input{accent-color:var(--accent)}
+.picks label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--surface))}
+.addpart{display:flex;gap:6px;max-width:440px}
+.addpart input{flex:1;min-width:0;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line2);background:var(--bg);color:var(--ink);font:inherit;font-size:14px}
+.drop{border:2px dashed var(--line2);border-radius:18px;padding:14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--bg)}
+.drop .prev{width:128px;aspect-ratio:16/10;border-radius:12px;background:var(--sunk);overflow:hidden;flex:none}
+.drop .prev img,.drop .prev video{width:100%;height:100%;object-fit:cover}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.formfoot{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.msg{font-size:14px}
+.msg.err{color:var(--err)} .msg.ok{color:var(--ok)}
+.notice{background:var(--sunk);border-radius:18px;padding:14px 18px;font-size:14px}
+
+/* 교재 */
+.guide{display:grid;grid-template-columns:210px minmax(0,1fr);gap:44px;padding-block:44px 72px}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 80px);align-self:start;display:flex;flex-direction:column;gap:2px;font-size:14px;background:var(--surface);border-radius:22px;padding:16px;box-shadow:var(--shadow)}
+.toc b{font-family:var(--display);font-weight:400;font-size:17px;color:var(--ink);margin-bottom:6px}
+.toc a{color:var(--muted);text-decoration:none;padding:5px 10px;border-radius:999px;transition:background-color var(--t),color var(--t)}
+.toc a:hover{background:var(--sunk);color:var(--ink)}
+.lesson{max-width:740px;min-width:0}
+.lesson .lead{font-size:16px;margin:10px 0 8px}
+.lesson section{padding-block:30px 6px;scroll-margin-top:84px}
+.lesson h2{font-family:var(--display);font-weight:400;font-size:25px;margin:0 0 12px;display:flex;align-items:center;gap:10px;color:var(--ink);text-wrap:balance}
+.lesson h3{font-family:var(--display);font-weight:400;font-size:18px;margin:0 0 8px;color:var(--ink)}
+.lesson p{margin:0 0 12px}
+.lesson ol,.lesson ul{margin:0 0 14px;padding-left:22px;display:grid;gap:7px}
+.num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:16px;box-shadow:inset 0 -3px 0 var(--accent-deep)}
+code{font-family:var(--mono);font-size:.9em;background:var(--sunk);padding:1px 7px;border-radius:8px;color:var(--ink)}
+kbd{font-family:var(--body);font-size:.92em;background:var(--surface);color:var(--ink);border:1.5px solid var(--line2);border-bottom-width:3px;padding:0 8px;border-radius:8px;white-space:nowrap}
+kbd.go{background:#1F883D;color:#FFFFFF;border-color:#196C2E}
+.pill{display:inline-block;font-family:var(--mono);font-size:13px;padding:1px 10px;border-radius:999px;border:1.5px dashed var(--accent);color:var(--accent-deep);cursor:pointer}
+.pill:hover::after{content:" 복사";font-family:var(--body);font-size:11px}
+.ready{list-style:none;padding:0!important}
+.ready li{display:grid;grid-template-columns:180px minmax(0,1fr);gap:12px;padding:12px 16px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow)}
+.ready li b{color:var(--ink)}
+.ready li span{color:var(--muted);font-size:14px}
+.callout{background:color-mix(in srgb,var(--sky1) 55%,var(--surface));padding:12px 16px;border-radius:18px;font-size:14.5px;margin-top:12px;position:relative}
+.callout b{display:block;font-family:var(--display);font-weight:400;font-size:16px;color:var(--ink);margin-bottom:2px}
+.callout.tip{background:color-mix(in srgb,var(--leaf) 18%,var(--surface))}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.way{background:var(--surface);border-radius:20px;padding:16px 18px;min-width:0;box-shadow:var(--shadow)}
+.way ol{margin:0}
+.url{font-family:var(--mono);font-size:clamp(13px,2.4vw,17px);background:var(--surface);border-radius:18px;padding:16px 18px;margin:6px 0 10px;overflow-x:auto;white-space:nowrap;box-shadow:var(--shadow)}
+.url .u1{color:var(--muted)} .url .u2{color:var(--accent-deep)} .url .u3{color:var(--coral)}
+.small{font-size:13px;color:var(--muted)}
+.faq dt{font-family:var(--display);font-weight:400;font-size:17px;color:var(--ink);margin-top:16px}
+.faq dd{margin:4px 0 0;font-size:14.5px}
+.prompt{margin-top:18px;border-radius:20px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.ph-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;background:var(--sunk);font-size:14px;color:var(--ink)}
+.small-btn{min-height:30px!important;padding:2px 12px!important;font-size:13px!important}
+.prompt pre{margin:0;padding:14px 16px;font-family:var(--mono);font-size:13px;line-height:1.75;white-space:pre-wrap;color:var(--text)}
+.checks{list-style:none;padding:0!important}
+.checks label{display:flex;gap:10px;align-items:center;padding:10px 16px;background:var(--surface);border-radius:999px;cursor:pointer;color:var(--ink);box-shadow:var(--shadow)}
+.checks input{accent-color:var(--leaf);width:18px;height:18px}
+.checks label:has(input:checked){color:var(--muted);text-decoration:line-through}
+
+footer{background:var(--sea3);color:#EAF6F8;font-size:13px}
+footer .wrap{padding-block:22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+footer .bui{width:44px;height:44px;flex:none}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:20}
+
+@media (max-width:767px){
+  .hero-in{grid-template-columns:1fr;padding-block:36px 8px}
+  .mascot{order:-1}
+  .mascot .bui{width:150px}
+  .bubble{font-size:16px}
+  .orb{left:auto;right:6%;top:96px;width:42px;height:42px}
+  .cta{width:100%}.cta .btn{flex:1 1 100%}
+  .stats{grid-template-columns:1fr 1fr}
+  .howto{grid-template-columns:1fr 1fr}
+  .row2{grid-template-columns:1fr}
+  .search{flex:1 1 100%;margin-left:0}
+  .filters{position:static}
+  .guide{grid-template-columns:1fr;gap:18px;padding-block:28px 56px}
+  .toc{position:static;flex-direction:row;flex-wrap:wrap}
+  .toc b{width:100%}
+  .two,.ready li{grid-template-columns:1fr}
+  .submit form{padding:18px}
+}
+@media (max-width:420px){.grid{grid-template-columns:1fr}.brand span{display:none}.stats dd{font-size:26px}}
+@media (prefers-reduced-motion:reduce){.bob,.glow,.waves g,.card{animation:none!important;transition:none!important}}
+html{scroll-behavior:smooth}
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+.ways{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.ways .way h3{font-family:var(--display);font-weight:400;font-size:20px;margin:0 0 6px;color:var(--ink)}
+.ways .way p{margin:0 0 12px}
+@media (max-width:767px){.ways{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="bui" viewBox="0 0 160 160">
+    <circle class="glow" cx="80" cy="16" r="13" fill="var(--sun)" opacity=".45"/>
+    <path d="M80 42 V22" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <circle cx="80" cy="16" r="7" fill="var(--sun)" stroke="var(--ink)" stroke-width="3"/>
+    <path d="M36 104 Q16 106 18 120 Q30 120 40 112 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M124 104 Q144 106 142 120 Q130 120 120 112 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M30 94 C30 60 52 40 80 40 C108 40 130 60 130 94 C130 122 108 138 80 138 C52 138 30 122 30 94 Z" fill="var(--cream)" stroke="var(--ink)" stroke-width="3.5"/>
+    <path d="M31.5 104 C52 114 108 114 128.5 104 C127 112 125 116 122 120 C102 128 58 128 38 120 C35 116 33 112 31.5 104 Z" fill="var(--accent)"/>
+    <circle cx="58" cy="116" r="2.4" fill="var(--cream)" opacity=".8"/><circle cx="80" cy="119" r="2.4" fill="var(--cream)" opacity=".8"/><circle cx="102" cy="116" r="2.4" fill="var(--cream)" opacity=".8"/>
+    <path d="M44 66 Q50 54 62 50" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none" opacity=".9"/>
+    <ellipse cx="62" cy="82" rx="6" ry="7.5" fill="#2B3A42"/><ellipse cx="98" cy="82" rx="6" ry="7.5" fill="#2B3A42"/>
+    <circle cx="64.5" cy="78.5" r="2.4" fill="#FFFFFF"/><circle cx="100.5" cy="78.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="60" cy="86" r="1.1" fill="#FFFFFF"/><circle cx="96" cy="86" r="1.1" fill="#FFFFFF"/>
+    <ellipse cx="49" cy="95" rx="8" ry="4.5" fill="#F29A86" opacity=".7"/><ellipse cx="111" cy="95" rx="8" ry="4.5" fill="#F29A86" opacity=".7"/>
+    <path d="M73 93 Q80 100 87 93" stroke="#2B3A42" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M6 140 Q22 130 38 140 T70 140 T102 140 T134 140 T166 140" stroke="var(--sea3)" stroke-width="4" stroke-linecap="round" fill="none" opacity=".8"/>
+    <path d="M20 152 Q34 144 48 152 T76 152 T104 152 T132 152" stroke="var(--sea2)" stroke-width="3.5" stroke-linecap="round" fill="none" opacity=".6"/>
+  </symbol>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand"><svg class="logo" aria-hidden="true"><use href="#bui"/></svg><b>pyOCEAN</b><span>부산과학고 해양생태탐구 동아리 · ESP32 특강</span></div>
+    <nav class="tabs" aria-label="보기 전환">
+      <a href="#gallery" id="tab-gallery">갤러리</a>
+      <a href="#guide" id="tab-guide">교재</a>
+      <a href="#submit" id="tab-submit">작품 내기</a>
+    </nav>
+  </div>
+</header>
+
+<main id="view-gallery">
+  <section class="hero">
+    <div class="sky" aria-hidden="true"><div class="stars"></div><span class="orb"></span><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span></div>
+    <div class="wrap hero-in">
+      <div class="hero-text">
+        <div class="eyebrow">해양생태탐구 동아리 · ESP32 특강 작품</div>
+        <h1>센서로 바다를 읽은 우리 작품</h1>
+        <p>11월 12일 특강에서 ESP32 센서와 생성형 AI로 만든 관제 시뮬레이터를 모았어요. 친구 작품을 열어 보고, 좋아요와 한 줄 피드백을 남겨 주세요.</p>
+        <div class="cta"><a class="btn primary" href="#submit">작품 내는 방법</a><a class="btn" href="#guide">GitHub에 올리는 법</a></div>
+      </div>
+      <div class="mascot">
+        <div class="bubble">안녕, 나는 부이야!<br>오늘은 어떤 바다를 만들었어?</div>
+        <svg class="bui bob" role="img" aria-label="부표 캐릭터 부이"><use href="#bui"/></svg>
+      </div>
+    </div>
+    <svg class="waves" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <g><path class="w1" d="M-60 40 C120 10 260 70 440 40 C620 10 760 70 940 40 C1120 10 1260 70 1500 40 V90 H-60 Z"/></g>
+      <g><path class="w2" d="M-60 58 C140 30 300 82 480 56 C660 30 800 82 980 56 C1160 30 1300 82 1500 56 V90 H-60 Z"/></g>
+      <path class="w3" d="M0 74 C180 60 320 88 500 74 C680 60 820 88 1000 74 C1180 60 1300 86 1440 74 V90 H0 Z"/>
+    </svg>
+  </section>
+  <section class="wrap">
+    <dl class="stats" aria-label="현황">
+      <div><dt>작품</dt><dd id="st-works">0</dd></div>
+      <div><dt>참여 학생</dt><dd><span id="st-students">0</span><small> / 19</small></dd></div>
+      <div><dt>사용한 센서</dt><dd><span id="st-parts">0</span><small> 종류</small></dd></div>
+      <div><dt>최근 업데이트</dt><dd id="st-date">-</dd></div>
+    </dl>
+  </section>
+  <div class="wrap">
+    <ol class="howto">
+      <li><i>01</i><b>둘러보기</b>카드에서 작품 화면과 사용한 센서를 확인해요.</li>
+      <li><i>02</i><b>골라 보기</b>센서 버튼이나 검색창으로 원하는 작품과 친구를 찾아요.</li>
+      <li><i>03</i><b>응원하기</b><a data-gallery-link target="_blank" rel="noopener">Claude 갤러리</a>에서 좋아요와 한 줄 피드백을 남겨요.</li>
+      <li><i>04</i><b>올리고 제출하기</b><a href="#guide">교재</a>를 따라 GitHub에 올린 뒤 작품 내기 탭을 따라 제출해요.</li>
+    </ol>
+    <div class="filters" id="filters" role="toolbar" aria-label="센서별 필터"></div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+  </div>
+</main>
+
+<main id="view-guide" hidden>
+  <div class="wrap guide">
+    <aside class="toc" aria-label="교재 목차">
+      <b>교재 목차</b>
+      <a href="#guide" data-jump="g-ready">준비물</a>
+      <a href="#guide" data-jump="g-repo">1. 저장소 만들기</a>
+      <a href="#guide" data-jump="g-upload">2. 파일 올리기</a>
+      <a href="#guide" data-jump="g-commit">3. 커밋하기</a>
+      <a href="#guide" data-jump="g-pages">4. Pages 켜기</a>
+      <a href="#guide" data-jump="g-url">5. 주소 확인</a>
+      <a href="#guide" data-jump="g-test">6. 센서로 시험하기</a>
+      <a href="#guide" data-jump="g-submit">7. 갤러리에 제출</a>
+      <a href="#guide" data-jump="g-more">여러 작품 올리기</a>
+      <a href="#guide" data-jump="g-fix">문제 해결</a>
+      <a href="#guide" data-jump="g-check">체크리스트</a>
+    </aside>
+    <article class="lesson">
+      <div class="eyebrow">교재 · GitHub Pages</div>
+      <h1>내 시뮬레이터를 인터넷 주소로 만들기</h1>
+      <p class="lead">manus로 만든 HTML 파일은 지금 내 컴퓨터에만 있어요. GitHub Pages에 올리면 <code>https://아이디.github.io/저장소이름/</code> 같은 주소가 생기고, 친구들이 갤러리의 바로가기 버튼으로 내 작품을 열 수 있어요. 따라 하는 데 10분이면 충분해요.</p>
+
+      <section id="g-ready">
+        <h2>준비물</h2>
+        <ul class="ready">
+          <li><b>GitHub 계정</b><span>github.com에서 가입. 아이디가 주소에 들어가니 영문으로 기억하기 쉽게 정해요.</span></li>
+          <li><b>내 시뮬레이터 HTML 파일</b><span>manus에서 받은 <code>.html</code> 파일 하나 (예: 수해 경보기, 스마트 가로등)</span></li>
+          <li><b>크롬 브라우저</b><span>센서 연결 시험은 크롬에서 해요.</span></li>
+        </ul>
+        <div class="callout tip"><b>파일 하나로 만들었는지 확인</b>특강 프롬프트처럼 "단일 HTML 파일", "외부 파일 없이" 조건으로 만든 파일이어야 그대로 올라가요. 이미지나 CSS 파일이 따로 있다면 함께 올려야 해요.</div>
+      </section>
+
+      <section id="g-repo" class="step">
+        <h2><span class="num">1</span>새 저장소 만들기</h2>
+        <p>저장소(repository)는 작품 하나를 담는 폴더라고 생각하면 돼요.</p>
+        <ol>
+          <li>GitHub 로그인 후 오른쪽 위 <kbd>+</kbd> → <kbd>New repository</kbd>를 눌러요.</li>
+          <li><b>Repository name</b>에 영문 소문자로 이름을 적어요. 이 이름이 주소 끝에 붙어요. <span class="pill copy" data-copy="pyocean-flood">pyocean-flood</span></li>
+          <li><kbd>Public</kbd>을 골라요. Private이면 무료 계정에서는 Pages 주소가 생기지 않아요.</li>
+          <li><kbd>Add a README file</kbd>을 체크하고 <kbd>Create repository</kbd>를 눌러요.</li>
+        </ol>
+        <div class="callout"><b>이름 짓기</b>띄어쓰기 대신 하이픈(-)을 써요. 한글, 대문자, 공백은 피해요. 예: <code>pyocean-flood</code>, <code>smart-streetlight</code>, <code>marine-barrier</code></div>
+      </section>
+
+      <section id="g-upload" class="step">
+        <h2><span class="num">2</span>HTML 파일 올리기</h2>
+        <p>둘 중 편한 방법 하나만 하면 돼요. 가장 중요한 건 <b>파일 이름을 <code>index.html</code>로</b> 하는 거예요. 그래야 주소만 열어도 작품이 바로 나와요.</p>
+        <div class="two">
+          <div class="way">
+            <h3>방법 A · 파일 끌어다 놓기</h3>
+            <ol>
+              <li>저장소 화면에서 <kbd>Add file</kbd> → <kbd>Upload files</kbd></li>
+              <li>내 HTML 파일을 화면에 끌어다 놓아요.</li>
+              <li>올리기 전에 내 컴퓨터에서 파일 이름을 <code>index.html</code>로 바꿔 두면 편해요.</li>
+            </ol>
+          </div>
+          <div class="way">
+            <h3>방법 B · 코드 붙여넣기</h3>
+            <ol>
+              <li><kbd>Add file</kbd> → <kbd>Create new file</kbd></li>
+              <li>이름 칸에 <span class="pill copy" data-copy="index.html">index.html</span> 을 정확히 적어요.</li>
+              <li>manus가 준 코드를 처음부터 끝까지 전부 복사해 붙여넣어요.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="g-commit" class="step">
+        <h2><span class="num">3</span>커밋(저장)하기</h2>
+        <p>화면 아래(또는 오른쪽 위)의 초록색 <kbd class="go">Commit changes</kbd>를 눌러요. 커밋은 "지금 이 상태로 저장"이라는 뜻이에요. 메시지는 그대로 둬도 괜찮아요.</p>
+        <p>저장소 첫 화면에 <code>README.md</code>와 <code>index.html</code> 두 파일이 보이면 성공이에요.</p>
+      </section>
+
+      <section id="g-pages" class="step">
+        <h2><span class="num">4</span>GitHub Pages 켜기</h2>
+        <ol>
+          <li>저장소 위쪽 메뉴에서 <kbd>Settings</kbd>를 눌러요.</li>
+          <li>왼쪽 메뉴에서 <kbd>Pages</kbd>를 눌러요.</li>
+          <li><b>Build and deployment</b>의 Source가 <kbd>Deploy from a branch</kbd>인지 확인해요.</li>
+          <li><b>Branch</b>에서 <kbd>main</kbd>, 폴더는 <kbd>/ (root)</kbd>를 고르고 <kbd>Save</kbd>를 눌러요.</li>
+        </ol>
+      </section>
+
+      <section id="g-url" class="step">
+        <h2><span class="num">5</span>내 작품 주소 확인</h2>
+        <p>1~2분 기다린 뒤 Pages 화면을 새로고침하면 위쪽에 <b>Your site is live at</b> 과 함께 주소가 나와요. <kbd>Visit site</kbd>를 눌러 열어 봐요.</p>
+        <div class="url" aria-label="주소 모양"><span class="u1">https://</span><span class="u2">내아이디</span><span class="u1">.github.io/</span><span class="u3">저장소이름</span><span class="u1">/</span></div>
+        <p class="small">예: 아이디가 <code>bsshs-kim</code>, 저장소가 <code>pyocean-flood</code>이면 <code>https://bsshs-kim.github.io/pyocean-flood/</code></p>
+      </section>
+
+      <section id="g-test" class="step">
+        <h2><span class="num">6</span>센서로 시험하기</h2>
+        <p>주소로 연 페이지도 특강 때처럼 내 컴퓨터의 ESP32 대시보드 프로그램을 통해 센서 값을 받아요.</p>
+        <ol>
+          <li>컴퓨터에서 ESP32 대시보드 프로그램을 켜고 보드를 USB(<b>J2 PROG</b> 포트)로 연결해 <kbd>연결</kbd>을 눌러요.</li>
+          <li>크롬에서 내 작품 주소를 열고 위쪽의 <kbd>ws://localhost:9001 접속</kbd> 버튼을 눌러요.</li>
+          <li>수위 센서에 물티슈를 대거나, 조도 센서를 손으로 가리거나, 초음파 센서 앞에 손을 대서 화면이 바뀌는지 봐요.</li>
+        </ol>
+        <div class="callout tip"><b>키트가 없는 친구도 볼 수 있어요</b>센서가 연결되지 않은 컴퓨터에서는 화면 모양만 보여요. 그래서 갤러리에는 작동하는 모습을 캡처하거나 짧은 영상으로 함께 올려요.</div>
+      </section>
+
+      <section id="g-submit" class="step">
+        <h2><span class="num">7</span>갤러리에 제출하기</h2>
+        <ol>
+          <li>브라우저 주소창의 내 작품 주소를 복사해요.</li>
+          <li><a data-gallery-link target="_blank" rel="noopener">Claude 작품 갤러리</a>를 열고 <b>작품 제출</b> 탭으로 가요.</li>
+          <li><b>작품 링크</b> 칸에 주소를 붙여넣고, 학번 이름, 작동 화면, 설명을 채워 <kbd class="go">갤러리에 게시하기</kbd>를 눌러요.</li>
+        </ol>
+        <a class="btn primary" data-gallery-link target="_blank" rel="noopener">Claude 갤러리에서 제출하기 ↗</a>
+      </section>
+
+      <section id="g-more">
+        <h2>작품을 여러 개 올릴 때</h2>
+        <div class="two">
+          <div class="way">
+            <h3>작품마다 저장소 하나 (추천)</h3>
+            <p>1~5단계를 작품마다 반복해요. 저장소 이름만 다르게 하면 돼요.</p>
+            <p class="small"><code>…github.io/pyocean-flood/</code><br><code>…github.io/smart-streetlight/</code></p>
+          </div>
+          <div class="way">
+            <h3>저장소 하나에 파일 여러 개</h3>
+            <p>파일 이름을 <code>flood.html</code>, <code>light.html</code>처럼 다르게 올리고, 주소 끝에 파일 이름을 붙여요.</p>
+            <p class="small"><code>…github.io/pyocean/flood.html</code><br><code>…github.io/pyocean/light.html</code></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="g-fix">
+        <h2>문제 해결</h2>
+        <dl class="faq">
+          <dt>404 There isn't a GitHub Pages site here 가 나와요</dt>
+          <dd>파일 이름이 정확히 <code>index.html</code>인지(대문자, 띄어쓰기 없이), 저장소가 Public인지, Pages에서 main 브랜치를 Save했는지 확인하고 2분 더 기다려요.</dd>
+          <dt>화면은 나오는데 센서 값이 안 움직여요</dt>
+          <dd>대시보드 프로그램이 켜져 있고 ESP32가 연결됐는지 확인해요. 크롬에서 열었는지, 페이지의 접속 버튼을 눌렀는지도 봐요. 그래도 안 되면 특강 때처럼 파일을 더블클릭해 열었을 때는 되는지 비교해요.</dd>
+          <dt>코드를 고쳤는데 그대로예요</dt>
+          <dd>저장소에서 <code>index.html</code>을 누르고 연필 아이콘으로 고친 뒤 <kbd class="go">Commit changes</kbd>를 눌러요. 반영까지 1~2분 걸리니 기다렸다가 <kbd>Ctrl</kbd>+<kbd>F5</kbd>로 새로고침해요.</dd>
+          <dt>화면이 하얗게 나와요</dt>
+          <dd>코드를 붙여넣다가 앞뒤가 잘렸을 수 있어요. 코드가 <code>&lt;!DOCTYPE html&gt;</code> 또는 <code>&lt;html</code>로 시작해서 <code>&lt;/html&gt;</code>로 끝나는지 확인해요. 크롬에서 <kbd>F12</kbd>를 눌러 Console의 빨간 에러를 통째로 복사해 manus에게 물어봐도 좋아요.</dd>
+        </dl>
+        <div class="prompt">
+          <div class="ph-head"><b>manus에게 고쳐 달라고 할 때</b><button class="btn small-btn copy" type="button" data-copy-target="fixprompt">복사</button></div>
+          <pre id="fixprompt">이 HTML 파일을 GitHub Pages에 올렸더니 아래 문제가 생겼어.
+문제: (여기에 증상이나 Console 에러를 그대로 붙여넣기)
+조건: 파일 하나(index.html)로 동작하고, mqtt.min.js는 https CDN을 쓰고, ws://localhost:9001 접속 버튼과 구독 토픽은 지금 그대로 유지해 줘.
+고친 전체 코드를 처음부터 끝까지 보여 줘.</pre>
+        </div>
+      </section>
+
+      <section id="g-check">
+        <h2>오늘의 체크리스트</h2>
+        <ul class="checks" id="checks">
+          <li><label><input type="checkbox" id="c1">GitHub 저장소를 Public으로 만들었다</label></li>
+          <li><label><input type="checkbox" id="c2">index.html을 올리고 커밋했다</label></li>
+          <li><label><input type="checkbox" id="c3">Pages를 켜고 내 작품 주소가 열린다</label></li>
+          <li><label><input type="checkbox" id="c4">센서를 연결해 화면이 움직이는 걸 확인했다</label></li>
+          <li><label><input type="checkbox" id="c5">갤러리에 주소와 작동 화면을 제출했다</label></li>
+        </ul>
+      </section>
+    </article>
+  </div>
+</main>
+
+<main id="view-submit" hidden>
+  <div class="wrap submit">
+    <div class="eyebrow">pyOCEAN 작품 갤러리</div>
+    <h1>작품 내는 방법</h1>
+    <p style="color:var(--text);margin:12px 0 24px;max-width:56ch">이 페이지의 작품 목록은 선생님이 저장소의 <code>works.json</code>에 모아 올려요. 아래 두 방법 중 하나로 작품을 내 주세요.</p>
+    <div class="ways">
+      <div class="way">
+        <h3>1. Claude 갤러리에 바로 제출</h3>
+        <p>학번 이름, 작품 이름, 작동 화면 사진, GitHub Pages 주소, 설명을 적어 올려요. 친구들의 좋아요와 피드백도 여기서 받아요.</p>
+        <a class="btn primary" data-gallery-link target="_blank" rel="noopener">Claude 갤러리 열기 ↗</a>
+      </div>
+      <div class="way">
+        <h3>2. 선생님께 보내기</h3>
+        <p>Claude 계정이 없으면 아래 내용을 선생님께 보내 주세요. 선생님이 이 페이지에 올려 줘요.</p>
+        <ul style="margin:0;padding-left:20px;display:grid;gap:4px">
+          <li>학번 이름, 작품 이름, 한 줄 소개</li>
+          <li>사용한 센서·부품</li>
+          <li>작동 화면 캡처나 짧은 영상</li>
+          <li>GitHub Pages 주소 (<a href="#guide">교재</a> 참고)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap"><svg class="bui" aria-hidden="true"><use href="#bui"/></svg><span>2026학년도 부산과학고등학교 해양생태탐구 동아리(파이오션) · ESP32 활용 특강 · 지도교사 김영아</span></div></footer>
+
+<script>
+const GALLERY_URL="https://claude.ai/artifact/S9XYoyArUJn7aEPdGmSNCx";
+const PARTS=["수위 센서","조도 센서","초음파 센서","DS18B20 수온","토양 수분","온습도","서보 모터","부저","네오픽셀"];
+const TOPIC={"수위 센서":"esp32/sensor/soil","토양 수분":"esp32/sensor/soil","조도 센서":"esp32/sensor/cds","초음파 센서":"esp32/sensor/ultrasonic"};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl=u=>/^https:\/\//i.test(u||"")?u:"";
+const safeMedia=u=>/^(https:\/\/|images\/|\.\/images\/)[^"'<>\s]+$/i.test(u||"")?u:"";
+const state={works:[],filter:"all",q:"",loaded:false,failed:false};
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+document.querySelectorAll("[data-gallery-link]").forEach(a=>a.href=GALLERY_URL);
+
+function route(){
+  const h=location.hash.slice(1);const v=["submit","guide"].includes(h)?h:"gallery";
+  for(const k of ["gallery","guide","submit"]){
+    $("#view-"+k).hidden=k!==v;
+    const t=$("#tab-"+k);if(k===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current");
+  }
+  scrollTo(0,0);
+}
+addEventListener("hashchange",route);
+document.querySelectorAll("[data-jump]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.getElementById(a.dataset.jump)?.scrollIntoView({behavior:"smooth",block:"start"})}));
+async function copyText(t,el){
+  try{await navigator.clipboard.writeText(t);toast("복사했어요")}
+  catch(err){if(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}toast("Ctrl+C로 복사해 주세요")}
+}
+document.addEventListener("click",e=>{
+  const c=e.target.closest("[data-copy]");if(c){copyText(c.dataset.copy,c);return}
+  const b=e.target.closest("[data-copy-target]");if(b){const el=document.getElementById(b.dataset.copyTarget);copyText(el.textContent,el)}
+});
+document.querySelectorAll("#checks input").forEach(c=>{
+  c.checked=lsGet("pyo-"+c.id)==="1";
+  c.addEventListener("change",()=>lsSet("pyo-"+c.id,c.checked?"1":"0"));
+});
+
+function allParts(){const s=new Set(PARTS);state.works.forEach(w=>(w.parts||[]).forEach(p=>s.add(p)));return [...s]}
+function renderStats(){
+  $("#st-works").textContent=state.works.length;
+  const s=new Set();state.works.forEach(w=>{const id=(String(w.student||"").match(/\d{4}/)||[w.student])[0];if(id)s.add(id)});
+  $("#st-students").textContent=s.size;
+  const ps=new Set();state.works.forEach(w=>(w.parts||[]).forEach(p=>ps.add(p)));
+  $("#st-parts").textContent=ps.size;
+  const last=state.works.map(w=>w.date||"").sort().pop();
+  $("#st-date").textContent=last?last.slice(5).replace("-","."):"-";
+}
+function renderFilters(){
+  const cnt=id=>id==="all"?state.works.length:state.works.filter(w=>(w.parts||[]).includes(id)).length;
+  const items=["all",...allParts().filter(p=>cnt(p)>0)];
+  if(!items.includes(state.filter))state.filter="all";
+  $("#filters").innerHTML=items.map(p=>`<button class="chip" type="button" data-f="${esc(p)}" aria-pressed="${state.filter===p}">${p==="all"?"전체":esc(p)}<span class="n">${cnt(p)}</span></button>`).join("")+
+   `<div class="search"><input id="q" type="search" placeholder="작품명·학번·이름 검색" value="${esc(state.q)}" aria-label="작품 검색"></div>`;
+}
+$("#filters").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;state.filter=b.dataset.f;lsSet("pyo-filter",state.filter);renderFilters();renderGrid()});
+$("#filters").addEventListener("input",e=>{if(e.target.id!=="q")return;state.q=e.target.value;renderGrid()});
+function mediaHtml(w){
+  const t=(w.parts||[]).map(x=>TOPIC[x]).find(Boolean);
+  const top=t?`<span class="topic">${esc(t)}</span>`:"";
+  const m=safeMedia(w.image);
+  if(m&&/\.(mp4|webm|mov)$/i.test(m))return `<div class="thumb"><video src="${esc(m)}" muted loop playsinline controls preload="metadata"></video>${top}</div>`;
+  if(m)return `<div class="thumb"><img src="${esc(m)}" alt="${esc(w.title)} 작동 화면" loading="lazy">${top}</div>`;
+  return `<div class="thumb"><div class="ph"><div><b>${esc(w.title)}</b>작동 화면 준비 중</div></div>${top}</div>`;
+}
+function cardHtml(w){
+  const url=safeUrl(w.url);
+  return `<article class="card">
+    ${mediaHtml(w)}
+    <div class="body">
+      <div class="proj">${esc(w.student)}</div>
+      <h3>${esc(w.title)}</h3>
+      <p class="one">${esc(w.oneLine)}</p>
+      ${(w.parts||[]).length?`<div class="tags">${w.parts.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}
+      ${w.desc?`<details class="more"><summary>작품 설명 보기</summary><p>${esc(w.desc)}</p></details>`:""}
+    </div>
+    <div class="actions">
+      ${url?`<a class="btn primary" href="${esc(url)}" target="_blank" rel="noopener">바로가기 ↗</a>`:""}
+      <a class="btn" href="${GALLERY_URL}" target="_blank" rel="noopener">♡ 응원하러 가기</a>
+    </div>
+  </article>`;
+}
+const B='<svg class="bui bob" aria-hidden="true"><use href="#bui"/></svg>';
+function renderGrid(){
+  const g=$("#grid");
+  if(!state.loaded){g.innerHTML=`<div class="empty">${B}<b>${state.failed?"앗, 작품 목록을 못 찾았어요":"부이가 작품을 건져 오는 중"}</b>${state.failed?"works.json 파일을 읽지 못했어요. GitHub Pages 주소로 열었는지 확인해 주세요.":"잠시만 기다려 주세요."}</div>`;return}
+  const q=state.q.trim().toLowerCase();
+  const list=state.works.filter(w=>(state.filter==="all"||(w.parts||[]).includes(state.filter))&&(!q||[w.title,w.oneLine,w.student].join(" ").toLowerCase().includes(q)))
+    .sort((a,b)=>(b.date||"")>(a.date||"")?1:-1);
+  if(!list.length){g.innerHTML=state.works.length
+    ?`<div class="empty">${B}<b>조건에 맞는 작품이 없어요</b>다른 센서를 고르거나 검색어를 지워 보세요.</div>`
+    :`<div class="empty">${B}<b>아직 바다가 조용해요</b>수해 경보기, 스마트 가로등, 도난 경보기, 스마트 마린 배리어처럼 직접 만든 시뮬레이터를 기다리고 있어요.<a class="btn primary" href="#submit">작품 내는 방법 보기</a></div>`;return}
+  g.innerHTML=list.map(cardHtml).join("");
+}
+function renderAll(){renderStats();renderFilters();renderGrid()}
+async function boot(){
+  const saved=lsGet("pyo-filter");if(saved)state.filter=saved;
+  route();renderAll();
+  try{
+    const r=await fetch("works.json",{cache:"no-store"});if(!r.ok)throw 0;
+    const d=await r.json();state.works=Array.isArray(d)?d:(d.works||[]);state.loaded=true;
+  }catch(e){state.failed=true}
+  renderAll();
+}
+boot();
+</script>
+</body>
+</html>
