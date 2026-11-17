@@ -24,6 +24,9 @@ function setup() {
 }
 
 function getSheet_() {
+  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  if (sh) return sh;
+  setup(); // 작품 탭이 없으면 새로 만든다
   return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
 }
 
